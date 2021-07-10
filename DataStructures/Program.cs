@@ -6,7 +6,11 @@ namespace DataStructures
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+
+            Stack<int> yamStack = new Stack<int>(4);
+           
+
+            Console.WriteLine(yamStack.Peek());
         }
     }
 }
