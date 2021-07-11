@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
-//using Utilities;
+using Utilities;
 
 namespace DataStructures
 {
-    public class Stack<T> /*: IEnumerable<T> where T : IComparable<T>*/
+    // A type constraint `IComparable` is applied to `T`
+    public class Stack<T> : IEnumerable<T> where T : IComparable<T>
     {
         // Operations allowable
         // IsEmpty() returns true if the stack is empty or converse
@@ -15,52 +16,79 @@ namespace DataStructures
         // Peek() returns the last item added to the stack
         // Size() shows the number of items in the stack
 
-        private T[] _collection { get; set; }
-        private int _top;
-        private int _max;
-        Index top = ^1;
-        //public int Size { get { return _collection.Count;  } }
+        private ArrayList<T> _collection { get; set; }
+        public int Size { get { return _collection.Count; } }   
 
-
-        public Stack (int size)
+        public Stack()
         {
-            _top = -1;
-            _max = size;
-            _collection = new T[size];
+            //Stack Collection implemented as an array based list
+            _collection = new ArrayList<T>();
+        }
+
+        //Allows for specification of size on construction
+        public Stack(int initialCapacity)
+        {
+            if (initialCapacity < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+
+            _collection = new ArrayList<T>(initialCapacity);
+        }
+
+        public bool IsEmpty
+        {
+            get
+            {
+                return _collection.IsEmpty;
+            }
         }
 
         public void Push(T item)
         {
-            if(_top == _max -1)
-            {
-                return;
-            } else
-            {
-                _collection[++_top] = item;
-            }
+            _collection.Add(item);
         }
 
         public T Pop()
         {
-            if(_top == -1)
+            if(Size > 0)
             {
-                throw new IndexOutOfRangeException("List is empty.");
-
-            } else
-            {
-                return _collection[_top--];
+                var top = Top;
+                _collection.RemoveAt(_collection.Count - 1);
+                return top;
             }
+
+            throw new Exception("Stack is empty");
+
         }
 
-        public T Peek()
+        public T Peek() => Top;
+
+        public T Top
         {
-            if(_top == -1)
+            get
             {
-                throw new IndexOutOfRangeException("List is empty.");
-            } else
-            {
-                return _collection[top];
+                try
+                {
+                    return _collection[_collection.Count - 1];
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Stack is empty.");
+                }
             }
         }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = _collection.Count - 1; i >= 0; --i)
+                yield return _collection[i];
+        }
+
+        // Because IEnumerable<T> inherits from IEnumerable,
+        // we must implement both generic and non generic version of GetEnumerator
+        // see Chapter 7 C# 9 in a nutshell
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
