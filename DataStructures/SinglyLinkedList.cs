@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DataStructures
 {
-    public class SLinkedListNode<T> : IComparable<SLinkedListNode<T>> where T : IComparable<T>
+    public class SLinkedListNode<T>
     {
         private T _data;
         private SLinkedListNode<T> _next;
@@ -34,16 +32,8 @@ namespace DataStructures
             get { return this._next; }
             set { this._next = value; }
         }
-
-        // Implements CompareTo as required by the IComparable interface
-        public int CompareTo(SLinkedListNode<T> other)
-        {
-            if (other == null) return -1;
-
-            return this.Data.CompareTo(other.Data);
-        }
     }
-    public class SinglyLinkedList<T> : IEnumerable<T> where T : IComparable<T>
+    public class SinglyLinkedList<T>
     {
         private int _count;
         private SLinkedListNode<T> _firstNode { get; set; }
@@ -60,6 +50,11 @@ namespace DataStructures
             _firstNode = null;
             _lastNode = null;
             _count = 0;
+        }
+
+        public bool IsEmpty()
+        {
+            return (Count == 0);
         }
 
         // Returns the first element of the list
@@ -90,9 +85,37 @@ namespace DataStructures
 
         // Removes the first occurrence of an item in the LinkedList
         // returns true if said item is found and removes: false otherwise
+        // https://www.geeksforgeeks.org/linked-list-set-3-deleting-node/
         public bool Remove(T dataItem)
         { 
-            return false;
+
+            if(Check(dataItem) == false)
+            {
+                Console.WriteLine("Item does not exits");
+                return false;
+            }
+
+
+            SLinkedListNode<T> current = _firstNode, previous = null;
+
+            //If firstNode (i.e head) itself holds the dataItem to be deleted
+            if(current != null && current.Data.Equals(dataItem))
+            {
+                _firstNode = current.Next;
+                return true;
+            }
+
+            while (current != null && current.Data.Equals(dataItem) == false)
+            {
+                previous = current;
+                current = current.Next;
+            }
+
+            if (current == null) return false;
+
+            //Unlink node from the linked list
+            previous.Next = current.Next;
+            return true;
         }
 
         // Checks if an item is in the list
@@ -108,68 +131,13 @@ namespace DataStructures
             var current = _firstNode;
             while(current != null)
             {
-                if (current.Data == dataItem) return index;
+                if (current.Data.Equals(dataItem)) return index;
                 current = current.Next;
                 index++;
             }
 
             return -1;
         }
-
-        /********************************************************************************/
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return new SLinkedListEnumerator(this);
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return new SLinkedListEnumerator(this);
-        }
-
-        /********************************************************************************/
-
-        internal class SLinkedListEnumerator : IEnumerator<T>
-        {
-            private SLinkedListNode<T> _current;
-            private SinglyLinkedList<T> _doublyLinkedList;
-
-            public SLinkedListEnumerator(SinglyLinkedList<T> list)
-            {
-                this._doublyLinkedList = list;
-                this._current = list.Head;
-            }
-
-            public T Current
-            {
-                get { return this._current.Data; }
-            }
-
-            object System.Collections.IEnumerator.Current
-            {
-                get { return Current; }
-            }
-
-            public bool MoveNext()
-            {
-                _current = _current.Next;
-
-                return (this._current != null);
-            }
-
-            public void Reset()
-            {
-                _current = _doublyLinkedList.Head;
-            }
-
-            public void Dispose()
-            {
-                _current = null;
-                _doublyLinkedList = null;
-            }
-        }
-
 
     }
 }
