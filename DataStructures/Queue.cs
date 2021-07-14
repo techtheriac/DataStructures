@@ -74,9 +74,7 @@ namespace DataStructures
         /// <summary>
         /// removes item from Queue's end
         /// </summary>
-        /// <returns>
-        /// Deleted item
-        /// </returns>
+        /// <returns>Deleted item</returns>
         public T Dequeue()
         {
             T deleted = default(T);
@@ -94,7 +92,7 @@ namespace DataStructures
         }
 
         /// <summary>
-        /// Gets QNode before the last node
+        /// Gets QNode before the last
         /// <summary>
         private QNode<T> GetPrevious(QNode<T> node)
         {

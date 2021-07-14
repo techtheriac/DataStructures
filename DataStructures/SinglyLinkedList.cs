@@ -61,7 +61,11 @@ namespace DataStructures
         // Returns the first element of the list
         public T First => _firstNode == null ? default(T) : _firstNode.Data;
 
-        //Adds an item at the tail of the list and returns the count
+        /// <summary>
+        /// Adds an item at the tail of the list
+        /// </summary>
+        /// <param name="dataItem"></param>
+        /// <returns>Count of total items in the list</returns>
         public int Add(T dataItem)
         {
             SLinkedListNode<T> newNode = new SLinkedListNode<T>(dataItem);
