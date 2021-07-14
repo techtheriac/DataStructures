@@ -77,6 +77,9 @@ namespace DataStructures
         /// <returns>Deleted item</returns>
         public T Dequeue()
         {
+            if (Size == 0)
+                return default(T);
+
             T deleted = default(T);
             var previous = GetPrevious(_lastNode);
             deleted = previous.Next.Data;
