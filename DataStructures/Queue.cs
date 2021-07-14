@@ -37,11 +37,6 @@ namespace DataStructures
     }
     public class Queue<T>
     {
-        // Operations allowable
-        // IsEmpty() returns true if the queue is empty or converse DONE
-        // Enqueue(T item) adds an item to the tail of the queue - (addFirst) addtorear
-        // Dequeue(T item) removes and return the item at the head of the queue
-        // Size() shows the number of items currently in the queue DONE
 
         private int _count;
         private QNode<T> _firstNode { get; set; }
@@ -82,6 +77,9 @@ namespace DataStructures
             _lastNode = previous;
             _lastNode.Next = null;
 
+            // Decrease count by 1 after dequeue
+            _count--;
+
             return deleted;
 
         }
@@ -97,6 +95,20 @@ namespace DataStructures
                 current = current.Next;
             }
             return null;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            QNode<T> current = _firstNode;
+
+            while (current != null)
+            {
+
+                if (current == null) break;
+                yield return current.Data;
+
+                current = current.Next;
+            }
         }
     }
 }
