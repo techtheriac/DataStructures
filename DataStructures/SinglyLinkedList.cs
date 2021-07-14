@@ -96,7 +96,7 @@ namespace DataStructures
 
             if(Check(dataItem) == false)
             {
-                Console.WriteLine("Item does not exits");
+                //throw new InvalidOperationException("Collection contains no element");
                 return false;
             }
 

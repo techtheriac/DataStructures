@@ -119,7 +119,7 @@ namespace DataStructures
         public T Peek()
         {
             if (Size == 0)
-                Console.WriteLine("Stack is empty");
+                throw new InvalidOperationException("Collection contains no element");
 
             return GetPrevious(_lastNode).Next.Data;
         }
