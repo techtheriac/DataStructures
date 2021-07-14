@@ -58,6 +58,9 @@ namespace DataStructures
             return Size == 0 || _firstNode == null;
         }
         
+        /// <summary>
+        /// Adds item to tail of stack
+        /// </summary>
         public void Push(T dataItem)
         {
             SNode<T> newNode = new SNode<T>(dataItem);
@@ -75,6 +78,10 @@ namespace DataStructures
             _count++;
         }
         
+        /// <summary>
+        /// Removes Item from tail of stack
+        /// </summary>
+        /// <returns>Deleted Item</returns>
         public T Pop()
         {
             if (Size == 0)
@@ -92,6 +99,9 @@ namespace DataStructures
             return deleted;
         }
 
+        /// <summary>
+        /// Gets Node before the last node
+        /// </summary>
         private SNode<T> GetPrevious(SNode<T> node)
         {
             var current = _firstNode;
@@ -103,6 +113,9 @@ namespace DataStructures
             return null;
         }
 
+        /// <summary>
+        /// Returns the last 
+        /// </summary>
         public T Peek()
         {
             if (Size == 0)

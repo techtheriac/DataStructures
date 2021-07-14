@@ -50,6 +50,9 @@ namespace DataStructures
             return (Size == 0 || _firstNode == null);
         }
 
+        /// <summary>
+        /// Adds Item to Queue's head
+        /// </summary>
         public void Enqueue(T dataItem)
         {
             QNode<T> newNode = new QNode<T>(dataItem);
@@ -68,6 +71,12 @@ namespace DataStructures
             _count++;
         }
 
+        /// <summary>
+        /// removes item from Queue's end
+        /// </summary>
+        /// <returns>
+        /// Deleted item
+        /// </returns>
         public T Dequeue()
         {
             T deleted = default(T);
@@ -84,8 +93,9 @@ namespace DataStructures
 
         }
 
-
-        // Gets QNode before the last node
+        /// <summary>
+        /// Gets QNode before the last node
+        /// <summary>
         private QNode<T> GetPrevious(QNode<T> node)
         {
             var current = _firstNode;
