@@ -1,94 +1,129 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Collections;
-using Utilities;
 
 namespace DataStructures
 {
-    // A type constraint `IComparable` is applied to `T`
-    public class Stack<T> : IEnumerable<T> where T : IComparable<T>
+    public class SNode<T>
     {
-        // Operations allowable
-        // IsEmpty() returns true if the stack is empty or converse
-        // Push(T item) add an item at the tail of the stack
-        // Pop() removes and return the last item at the tail of the stack
-        // Peek() returns the last item added to the stack
-        // Size() shows the number of items in the stack
+        private T _data;
+        private SNode<T> _next;
 
-        private ArrayList<T> _collection { get; set; }
-        public int Size { get { return _collection.Count; } }   
+        public SNode()
+        {
+            Next = null;
+            Data = default(T);
+        }
+
+        public SNode(T dataItem)
+        {
+            Data = dataItem;
+            _next = null;
+        }
+
+        public T Data
+        {
+            get { return this._data; }
+            set { this._data = value; }
+        }
+
+        public SNode<T> Next
+        {
+            get { return this._next;  }
+            set { this._next = value;  }
+        }
+
+
+    }
+
+    class Stack<T>
+    {
+
+        private int _count;
+        SNode<T> _firstNode { get; set; }
+        SNode<T> _lastNode { get; set; }
+
+        public int Size => _count;
+
 
         public Stack()
         {
-            //Stack Collection implemented as an array based list
-            _collection = new ArrayList<T>();
+            _firstNode = null;
+            _lastNode = null;
+            _count = 0;
         }
 
-        //Allows for specification of size on construction
-        public Stack(int initialCapacity)
+        public bool IsEmpty()
         {
-            if (initialCapacity < 0)
+            return Size == 0 || _firstNode == null;
+        }
+        
+        public void Push(T dataItem)
+        {
+            SNode<T> newNode = new SNode<T>(dataItem);
+            if(_firstNode == null)
             {
-                throw new ArgumentOutOfRangeException();
+                _firstNode = _lastNode = newNode;
+            }
+            else
+            {
+                var currentNode = _lastNode;
+                currentNode.Next = newNode;
+                _lastNode = newNode;
             }
 
-
-            _collection = new ArrayList<T>(initialCapacity);
+            _count++;
         }
-
-        public bool IsEmpty
-        {
-            get
-            {
-                return _collection.IsEmpty;
-            }
-        }
-
-        public void Push(T item)
-        {
-            _collection.Add(item);
-        }
-
+        
         public T Pop()
         {
-            if(Size > 0)
-            {
-                var top = Top;
-                _collection.RemoveAt(_collection.Count - 1);
-                return top;
-            }
+            if (Size == 0)
+                throw new InvalidOperationException("Collection contains no element");
 
-            throw new Exception("Stack is empty");
+            T deleted = default(T);
+            var previous = GetPrevious(_lastNode);
+            deleted = previous.Next.Data;
 
+            _lastNode = previous;
+            _lastNode.Next = null;
+
+            _count--;
+
+            return deleted;
         }
 
-        public T Peek() => Top;
-
-        public T Top
+        private SNode<T> GetPrevious(SNode<T> node)
         {
-            get
+            var current = _firstNode;
+            while (current != null)
             {
-                try
-                {
-                    return _collection[_collection.Count - 1];
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Stack is empty.");
-                }
+                if (current.Next == node) return current;
+                current = current.Next;
             }
+            return null;
+        }
+
+        public T Peek()
+        {
+            if (Size == 0)
+                Console.WriteLine("Stack is empty");
+
+            return GetPrevious(_lastNode).Next.Data;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = _collection.Count - 1; i >= 0; --i)
-                yield return _collection[i];
+            SNode<T> current = _firstNode;
+
+            while (current != null)
+            {
+
+                if (current == null) break;
+                yield return current.Data;
+
+                current = current.Next;
+            }
         }
 
-        // Because IEnumerable<T> inherits from IEnumerable,
-        // we must implement both generic and non generic version of GetEnumerator
-        // see Chapter 7 C# 9 in a nutshell
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
