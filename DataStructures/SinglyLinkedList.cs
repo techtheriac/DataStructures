@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DataStructures
 {
@@ -17,8 +18,8 @@ namespace DataStructures
         // Constructor
         public SLinkedListNode(T dataItem)
         {
-            Next = null;
             Data = dataItem;
+            Next = null;
         }
 
         public T Data
@@ -139,5 +140,18 @@ namespace DataStructures
             return -1;
         }
 
+        public IEnumerator<T> GetEnumerator()
+        {
+            SLinkedListNode<T> current = _firstNode;
+
+            while(current != null)
+            {
+
+                if (current == null) break;
+                yield return current.Data;
+
+                current = current.Next;
+            }
+        }
     }
 }
